@@ -1,1 +1,7 @@
 to comment out multiple line Ctrl + /
+Master username
+postgres
+Master password
+Hasan109
+Endpoint
+database-1.c0edgplgg4hv.us-east-1.rds.amazonaws.com
