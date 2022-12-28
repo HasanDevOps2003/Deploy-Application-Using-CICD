@@ -285,7 +285,7 @@ jobs:
             tar -C backend -czvf backend_artifact.tar.gz .
             cd .circleci/ansible
             ansible-playbook -i inventory.txt deploy-backend.yml
-      - destroy-environment 
+      # - destroy-environment 
 
 #   smoke-test:
 #     docker:
