@@ -7,61 +7,54 @@ Parameters:
     Type: String
 
 Resources:
-    # Creates VPC to host Web App
-    VPC:
-      Type: AWS::EC2::VPC
-      Properties: 
-          CidrBlock: !Ref VpcCIDR
-          EnableDnsHostnames: true
-          Tags: 
-                - Key: Name 
-                  Value: udapeople vpc
-    # Creates internet gateway
-    InternetGateway:
-        Type: AWS::EC2::InternetGateway
-        Properties:
-            Tags:
-                - Key: Name
-                  Value: udapeople vpc
-    # Attaches internet gateway to VPC
-    InternetGatewayAttachment:
-        Type: AWS::EC2::VPCGatewayAttachment
-        Properties:
-            InternetGatewayId: !Ref InternetGateway
-            VpcId: !Ref VPC
-    # Creates first public subnet
-    PublicSubnet1: 
-        Type: AWS::EC2::Subnet
-        Properties:
-            VpcId: !Ref VPC
-            AvailabilityZone: !Select [ 0, !GetAZs '' ]
-            CidrBlock: !Ref PublicSubnet1CIDR
-            MapPublicIpOnLaunch: true
-            Tags: 
-                - Key: Name 
-                  Value: udapeople vpc Public Subnet (AZ1)
-    # Creates public route table
-    PublicRouteTable:
-        Type: AWS::EC2::RouteTable
-        Properties: 
-            VpcId: !Ref VPC
-            Tags: 
-                - Key: Name 
-                  Value: udapeople vpc Public Routes
-    # creates route for public route table
-    DefaultPublicRoute: 
-        Type: AWS::EC2::Route
-        DependsOn: InternetGatewayAttachment
-        Properties: 
-            RouteTableId: !Ref PublicRouteTable
-            DestinationCidrBlock: 0.0.0.0/0
-            GatewayId: !Ref InternetGateway
-    # Associates public route table to public subnet 1
-    PublicSubnet1RouteTableAssociation:
-        Type: AWS::EC2::SubnetRouteTableAssociation
-        Properties:
-            RouteTableId: !Ref PublicRouteTable
-            SubnetId: !Ref PublicSubnet1
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: udapeople-vpc
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: udapeople-vpc
+  InternetGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref InternetGateway
+      VpcId: !Ref VPC
+  PublicSubnet1: 
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      CidrBlock: 10.0.1.0/16
+      MapPublicIpOnLaunch: true
+      Tags: 
+        - Key: Name
+          Value: udapeople vpc Public Subnet (AZ1)
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties: 
+      VpcId: !Ref VPC
+      Tags: 
+        - Key: Name 
+          Value: udapeople vpc Public Routes
+  DefaultPublicRoute: 
+    Type: AWS::EC2::Route
+    DependsOn: InternetGatewayAttachment
+    Properties: 
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+  PublicSubnet1RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicSubnet1
   InstanceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
