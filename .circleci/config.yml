@@ -205,7 +205,7 @@ jobs:
       - install_awscli
       - install_ansible
       - add_ssh_keys:
-          fingerprints: ["14:0c:b2:57:29:2e:3a:d3:ac:b0:46:ca:46:03:f3:bc"]
+          fingerprints: ["8e:89:c3:f3:6c:88:d6:84:29:5a:45:a8:ac:33:db:6b"]
       - attach_workspace:
           at: ~/
       - run:
