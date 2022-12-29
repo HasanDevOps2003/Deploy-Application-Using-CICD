@@ -1,17 +1,31 @@
----
-- name: "Move backend files to server."
+- name: "Copy"
+  become: yes
   copy:
-    src: /root/project/backend_artifact.tar.gz
-    dest: ~/home/ubuntu
+    src: ~/project/artifact.tar.gz
+    dest: /home/ubuntu/artifact.tar.gz
 
-- name: "install package dependencies"
+- name: "Install dependencies"
+  become: true
   shell: |
-    cd ~/home/ubuntu
-    tar -xzvf backend_artifact.tar.gz -C backend
-    rm backend_artifact.tar.gz
-    cd backend/
-    # npm install && npm run build
-    npm audit fix && npm run build
-    cd dist
-    echo `pwd` >> ansible-test.txt
-    pm2 start npm --name backend -- start
+    sudo apt-get -y update
+    sudo apt-get -y install npm
+    npm install pm2@latest -g
+- name: "Extract backend files"
+  become: true
+  shell: |
+    cd /home/ubuntu
+    tar -vxf artifact.tar.gz
+    rm artifact.tar.gz
+- name: npm install
+  become: true
+  shell: |
+    cd /home/ubuntu
+    npm install
+- name: "Start"
+  shell: |
+    cd /home/ubuntu/
+    sudo mkdir /home/ubuntu/.pm2
+    sudo chown -R 1000:1000 "/home/ubuntu/.pm2/"
+    pm2 stop default
+    pm2 start npm --name 'udapeople' -- start
+    pm2 ls
