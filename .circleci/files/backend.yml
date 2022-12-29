@@ -1,64 +1,16 @@
 Description: >
   UdaPeople backend stack.
 
-# Parameters:
-#   ID:
-#     Description: Unique identifier.
-#     Type: String
+Parameters:
+  ID:
+    Description: Unique identifier.
+    Type: String
 
 Resources:
-  VPC:
-    Type: AWS::EC2::VPC
-    Properties:
-      CidrBlock: 10.0.0.0/16
-      EnableDnsHostnames: true
-      Tags:
-        - Key: Name
-          Value: udapeople-vpc
-  InternetGateway:
-    Type: AWS::EC2::InternetGateway
-    Properties:
-      Tags:
-        - Key: Name
-          Value: udapeople-vpc
-  InternetGatewayAttachment:
-    Type: AWS::EC2::VPCGatewayAttachment
-    Properties:
-      InternetGatewayId: !Ref InternetGateway
-      VpcId: !Ref VPC
-  PublicSubnet1: 
-    Type: AWS::EC2::Subnet
-    Properties:
-      VpcId: !Ref VPC
-      AvailabilityZone: !Select [ 0, !GetAZs '' ]
-      CidrBlock: 10.0.1.0/16
-      MapPublicIpOnLaunch: true
-      Tags: 
-        - Key: Name
-          Value: udapeople vpc Public Subnet (AZ1)
-  PublicRouteTable:
-    Type: AWS::EC2::RouteTable
-    Properties: 
-      VpcId: !Ref VPC
-      Tags: 
-        - Key: Name 
-          Value: udapeople vpc Public Routes
-  DefaultPublicRoute: 
-    Type: AWS::EC2::Route
-    DependsOn: InternetGatewayAttachment
-    Properties: 
-      RouteTableId: !Ref PublicRouteTable
-      DestinationCidrBlock: 0.0.0.0/0
-      GatewayId: !Ref InternetGateway
-  PublicSubnet1RouteTableAssociation:
-    Type: AWS::EC2::SubnetRouteTableAssociation
-    Properties:
-      RouteTableId: !Ref PublicRouteTable
-      SubnetId: !Ref PublicSubnet1
   InstanceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupName:  !Sub UdaPeople-
+      GroupName: !Sub UdaPeople-${ID}
       GroupDescription: Allow port 22 and port 3030.
       SecurityGroupIngress:
         - IpProtocol: tcp
@@ -69,15 +21,17 @@ Resources:
           FromPort: 3030
           ToPort: 3030
           CidrIp: 0.0.0.0/0
+
   EC2Instance:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: ami-068663a3c619dd892
       InstanceType: t2.micro
-      SubnetId: !Ref PublicSubnet1
-      KeyName: udacity
-      SecurityGroupIds: 
-        - !Ref InstanceSecurityGroup
+      SecurityGroups:
+        - Ref: InstanceSecurityGroup
+      KeyName: udacity # If you use another key pair name, you should change this value to match.
+      # If this ami id is not available for you, you can find another (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/finding-an-ami.html)
+      # Ubuntu 18 or higher works fine
+      ImageId: ami-068663a3c619dd892 
       Tags:
-       - Key: Name
-         Value: !Sub backend-
+        - Key: Name
+          Value: !Sub backend-${ID}
