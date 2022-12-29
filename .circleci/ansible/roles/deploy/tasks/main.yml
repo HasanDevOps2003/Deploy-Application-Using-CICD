@@ -1,31 +1,26 @@
-- name: "Copy"
-  become: yes
-  copy:
-    src: ~/project/artifact.tar.gz
-    dest: /home/ubuntu/artifact.tar.gz
+---
+- name: create directory 
+  become: true
+  file: 
+    path: /home/ubuntu/web
+    state: directory
+    mode: 0755
 
-- name: "Install dependencies"
+- name: copy artifact
+  become: true
+  copy: 
+    src: ~/project/backend-artifact.tar.gz
+    dest: /home/ubuntu/web/backend-artifact.tar.gz
+
+- name: Extract artifact files
   become: true
   shell: |
-    sudo apt-get -y update
-    sudo apt-get -y install npm
-    npm install pm2@latest -g
-- name: "Extract backend files"
+    cd /home/ubuntu/web
+    tar -xvf backend-artifact.tar.gz
+- name: Executing node
   become: true
   shell: |
-    cd /home/ubuntu
-    tar -vxf artifact.tar.gz
-    rm artifact.tar.gz
-- name: npm install
-  become: true
-  shell: |
-    cd /home/ubuntu
+    cd /home/ubuntu/web/backend
     npm install
-- name: "Start"
-  shell: |
-    cd /home/ubuntu/
-    sudo mkdir /home/ubuntu/.pm2
-    sudo chown -R 1000:1000 "/home/ubuntu/.pm2/"
     pm2 stop default
-    pm2 start npm --name 'udapeople' -- start
-    pm2 ls
+    pm2 start npm -- start
