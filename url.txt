@@ -7,4 +7,4 @@ Endpoint
 database-1.c0edgplgg4hv.us-east-1.rds.amazonaws.com
 
 URL01 - https://github.com/HasanDevOps2003/project-3-
-URL02 - http://udapeople-55c20c7.s3-website-us-east-1.amazonaws.com/#/employees
+URL02 - http://udapeople-01d929f.s3-website-us-east-1.amazonaws.com/#/employees
