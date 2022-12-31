@@ -7,7 +7,7 @@ Endpoint
 database-1.c0edgplgg4hv.us-east-1.rds.amazonaws.com
 
 URL01 - https://github.com/HasanDevOps2003/project-3-
-URL02 (bucket url) - 
-URL03 (cloudfront url) - 
+URL02 (bucket url) - http://udapeople-1ad7a97.s3-website-us-east-1.amazonaws.com/#/employees
+URL03 (cloudfront url) - http://d3mah2g8q0vwps.cloudfront.net/#/employees
 URL04 (https://<Public-IP>:3030/api/status) - 
-URL05 (prometheus url) - 
+URL05 (prometheus url) - http://ec2-52-203-87-17.compute-1.amazonaws.com:9090/targets
